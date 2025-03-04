@@ -1,0 +1,49 @@
+package org.ikrotsyuk.bsuir.firstservice.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "article")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class ArticleEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "writer_id")
+    private WriterEntity writer;
+    @NotNull
+    @Size(min = 2, max = 64)
+    private String title;
+    @NotNull
+    @Size(min = 4, max = 2048)
+    private String content;
+    @Column(name = "created")
+    private LocalDateTime createdAt;
+    @Column(name = "modified")
+    private LocalDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)
+    private List<ReactionEntity> reactions = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "articles_stickers",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "sticker_id")
+    )
+    private List<StickerEntity> stickers = new ArrayList<>();
+}
