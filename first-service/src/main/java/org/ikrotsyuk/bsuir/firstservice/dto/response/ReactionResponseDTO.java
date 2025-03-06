@@ -1,5 +1,6 @@
-package org.ikrotsyuk.bsuir.firstservice.dto;
+package org.ikrotsyuk.bsuir.firstservice.dto.response;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -9,10 +10,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReactionDTO {
+public class ReactionResponseDTO {
+    @NotNull
+    private Long id;
     @NotNull
     private Long articleId;
-    @NotNull
+    @NotBlank
     @Size(min = 2, max = 2048)
     private String content;
 }

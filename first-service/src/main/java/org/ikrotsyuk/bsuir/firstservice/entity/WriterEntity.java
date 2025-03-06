@@ -1,6 +1,7 @@
 package org.ikrotsyuk.bsuir.firstservice.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -18,16 +19,16 @@ public class WriterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+    @NotBlank
     @Size(min = 2, max = 64)
     private String login;
-    @NotNull
+    @NotBlank
     @Size(min = 8, max = 128)
     private String password;
-    @NotNull
+    @NotBlank
     @Size(min = 2, max = 64)
     private String firstname;
-    @NotNull
+    @NotBlank
     @Size(min = 2, max = 64)
     private String lastname;
 

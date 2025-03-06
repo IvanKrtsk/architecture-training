@@ -1,7 +1,7 @@
 package org.ikrotsyuk.bsuir.firstservice.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class ReactionEntity {
     @ManyToOne
     @JoinColumn(name = "article_id")
     private ArticleEntity article;
-    @NotNull
+    @NotBlank
     @Size(min = 2, max = 2048)
     private String content;
 }
