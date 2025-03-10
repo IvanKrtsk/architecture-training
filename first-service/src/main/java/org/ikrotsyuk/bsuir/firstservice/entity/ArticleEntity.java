@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "article")
+@Table(name = "tbl_article")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -41,7 +41,7 @@ public class ArticleEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "articles_stickers",
+            name = "tbl_articles_stickers",
             joinColumns = @JoinColumn(name = "article_id"),
             inverseJoinColumns = @JoinColumn(name = "sticker_id")
     )

@@ -2,6 +2,10 @@ package org.ikrotsyuk.bsuir.firstservice.exception.handlers;
 
 import org.ikrotsyuk.bsuir.firstservice.controller.ArticleController;
 import org.ikrotsyuk.bsuir.firstservice.controller.WriterController;
+import org.ikrotsyuk.bsuir.firstservice.exception.exceptions.ArticleWithSameTitleFoundException;
+import org.ikrotsyuk.bsuir.firstservice.exception.exceptions.NoArticleWithReactionArticleIdFound;
+import org.ikrotsyuk.bsuir.firstservice.exception.exceptions.NoWriterWithArticleWriterIdFound;
+import org.ikrotsyuk.bsuir.firstservice.exception.exceptions.UserWithSameLoginFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -23,5 +27,25 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserWithSameLoginFoundException.class)
+    public ResponseEntity<String> handleUserWithSameLoginFoundException(UserWithSameLoginFoundException ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ArticleWithSameTitleFoundException.class)
+    public ResponseEntity<String> handleArticleWithSameTitleFoundException(ArticleWithSameTitleFoundException ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NoWriterWithArticleWriterIdFound.class)
+    public ResponseEntity<String> handleNoWriterWithArticleWriterIdFound(NoWriterWithArticleWriterIdFound ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NoArticleWithReactionArticleIdFound.class)
+    public ResponseEntity<String> handleNoArticleWithReactionArticleIdFound(NoArticleWithReactionArticleIdFound ex){
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
     }
 }

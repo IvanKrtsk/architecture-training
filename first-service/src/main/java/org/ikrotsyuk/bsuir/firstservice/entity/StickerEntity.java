@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "sticker")
+@Table(name = "tbl_sticker")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

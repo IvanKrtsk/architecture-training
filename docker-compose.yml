@@ -4,7 +4,7 @@ services:
   postgres-rv:
     image: postgres:16.2
     environment:
-      POSTGRES_DB: rv_db
+      POSTGRES_DB: distcomp
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -20,7 +20,7 @@ services:
       - "24110:24110"
     environment:
       SPRING_APPLICATION_NAME: first-service
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-rv/rv_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-rv/distcomp
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: update

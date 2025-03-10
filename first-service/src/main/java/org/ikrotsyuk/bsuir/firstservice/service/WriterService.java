@@ -1,8 +1,11 @@
 package org.ikrotsyuk.bsuir.firstservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.ikrotsyuk.bsuir.firstservice.dto.request.WriterRequestDTO;
 import org.ikrotsyuk.bsuir.firstservice.dto.response.WriterResponseDTO;
 import org.ikrotsyuk.bsuir.firstservice.entity.WriterEntity;
+import org.ikrotsyuk.bsuir.firstservice.exception.JSONConverter;
+import org.ikrotsyuk.bsuir.firstservice.exception.exceptions.UserWithSameLoginFoundException;
 import org.ikrotsyuk.bsuir.firstservice.mapper.WriterMapper;
 import org.ikrotsyuk.bsuir.firstservice.repository.WriterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +20,26 @@ import java.util.Optional;
 public class WriterService {
     private final WriterRepository writerRepository;
     private final WriterMapper writerMapper;
+    private final JSONConverter jsonConverter;
 
     @Autowired
-    public WriterService(WriterMapper writerMapper, WriterRepository writerRepository){
+    public WriterService(WriterMapper writerMapper, WriterRepository writerRepository, JSONConverter jsonConverter){
         this.writerRepository = writerRepository;
         this.writerMapper = writerMapper;
+        this.jsonConverter = jsonConverter;
     }
 
-    public WriterResponseDTO addWriter(WriterRequestDTO writerRequestDTO){
-        return writerMapper.toDTO(writerRepository.save(writerMapper.toEntity(writerRequestDTO)));
+    public WriterResponseDTO addWriter(WriterRequestDTO writerRequestDTO) {
+        Optional<WriterEntity> optionalWriterEntity = writerRepository.findByLogin(writerRequestDTO.getLogin());
+        if(optionalWriterEntity.isEmpty())
+            return writerMapper.toDTO(writerRepository.save(writerMapper.toEntity(writerRequestDTO)));
+        else {
+            try{
+                throw new UserWithSameLoginFoundException(jsonConverter.convertObjectToJSON(writerRequestDTO));
+            }catch (JsonProcessingException ex){
+                return writerMapper.toDTO(optionalWriterEntity.get());
+            }
+        }
     }
 
     public WriterResponseDTO getWriterById(long id){

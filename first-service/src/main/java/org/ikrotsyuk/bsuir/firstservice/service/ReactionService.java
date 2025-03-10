@@ -1,9 +1,14 @@
 package org.ikrotsyuk.bsuir.firstservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.ikrotsyuk.bsuir.firstservice.dto.request.ReactionRequestDTO;
 import org.ikrotsyuk.bsuir.firstservice.dto.response.ReactionResponseDTO;
+import org.ikrotsyuk.bsuir.firstservice.entity.ArticleEntity;
 import org.ikrotsyuk.bsuir.firstservice.entity.ReactionEntity;
+import org.ikrotsyuk.bsuir.firstservice.exception.JSONConverter;
+import org.ikrotsyuk.bsuir.firstservice.exception.exceptions.NoArticleWithReactionArticleIdFound;
 import org.ikrotsyuk.bsuir.firstservice.mapper.ReactionMapper;
+import org.ikrotsyuk.bsuir.firstservice.repository.ArticleRepository;
 import org.ikrotsyuk.bsuir.firstservice.repository.ReactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +21,16 @@ import java.util.Optional;
 @Service
 public class ReactionService {
     private final ReactionRepository reactionRepository;
+    private final ArticleRepository articleRepository;
     private final ReactionMapper reactionMapper;
+    private final JSONConverter jsonConverter;
 
     @Autowired
-    public ReactionService(ReactionRepository reactionRepository, ReactionMapper reactionMapper){
+    public ReactionService(ReactionRepository reactionRepository, ReactionMapper reactionMapper, ArticleRepository articleRepository, JSONConverter jsonConverter){
         this.reactionRepository = reactionRepository;
         this.reactionMapper = reactionMapper;
+        this.articleRepository = articleRepository;
+        this.jsonConverter = jsonConverter;
     }
 
     public List<ReactionResponseDTO> getReactions(){
@@ -38,8 +47,16 @@ public class ReactionService {
     }
 
     public ReactionResponseDTO addReaction(ReactionRequestDTO reactionRequestDTO){
-        ReactionEntity reactionEntity = reactionMapper.toEntity(reactionRequestDTO);
-        return reactionMapper.toDTO(reactionRepository.save(reactionEntity));
+        Optional<ArticleEntity> optionalArticleEntity = articleRepository.findById(reactionRequestDTO.getArticleId());
+        if(optionalArticleEntity.isPresent()) {
+            ReactionEntity reactionEntity = reactionMapper.toEntity(reactionRequestDTO);
+            return reactionMapper.toDTO(reactionRepository.save(reactionEntity));
+        } else
+            try {
+                throw new NoArticleWithReactionArticleIdFound(jsonConverter.convertObjectToJSON(reactionRequestDTO));
+            }catch (JsonProcessingException ex){
+                return null;
+            }
     }
 
     public HttpStatus deleteReaction(Long id){
