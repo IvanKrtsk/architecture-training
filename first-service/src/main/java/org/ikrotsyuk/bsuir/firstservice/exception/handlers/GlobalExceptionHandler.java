@@ -1,6 +1,7 @@
 package org.ikrotsyuk.bsuir.firstservice.exception.handlers;
 
 import org.ikrotsyuk.bsuir.firstservice.controller.ArticleController;
+import org.ikrotsyuk.bsuir.firstservice.controller.WriterController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice(assignableTypes = {ArticleController.class})
-public class ArticleGlobalExceptionHandler {
+@ControllerAdvice(assignableTypes = {ArticleController.class, WriterController.class})
+public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
