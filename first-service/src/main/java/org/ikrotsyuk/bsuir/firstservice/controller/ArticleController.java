@@ -1,15 +1,14 @@
 package org.ikrotsyuk.bsuir.firstservice.controller;
 
+import jakarta.validation.Valid;
+import org.ikrotsyuk.bsuir.firstservice.dto.request.ArticleRequestDTO;
 import org.ikrotsyuk.bsuir.firstservice.dto.response.ArticleResponseDTO;
 import org.ikrotsyuk.bsuir.firstservice.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +31,24 @@ public class ArticleController {
     @GetMapping("/{id}")
     public ResponseEntity<ArticleResponseDTO> getArticle(@PathVariable Long id){
         return new ResponseEntity<>(articleService.getArticleById(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<ArticleResponseDTO> addArticle(@Valid @RequestBody ArticleRequestDTO articleRequestDTO){
+        return new ResponseEntity<>(articleService.addArticle(articleRequestDTO), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteArticle(@PathVariable Long id){
+        return new ResponseEntity<>(articleService.deleteArticle(id));
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateArticle(@Valid @RequestBody ArticleResponseDTO articleResponseDTO){
+        HttpStatus status = articleService.updateArticle(articleResponseDTO);
+        if(status.is2xxSuccessful())
+            return new ResponseEntity<>(articleResponseDTO, status);
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

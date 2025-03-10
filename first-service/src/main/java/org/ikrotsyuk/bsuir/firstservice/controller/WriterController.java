@@ -45,9 +45,8 @@ public class WriterController {
 
     @PutMapping
     public ResponseEntity<WriterResponseDTO> updateWriter(@Valid @RequestBody WriterResponseDTO writerResponseDTO){
-        System.err.println(writerResponseDTO.getLogin());
         HttpStatus status = writerService.updateWriter(writerResponseDTO);
-        if(status == HttpStatus.OK)
+        if(status.is2xxSuccessful())
             return new ResponseEntity<>(writerResponseDTO, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
