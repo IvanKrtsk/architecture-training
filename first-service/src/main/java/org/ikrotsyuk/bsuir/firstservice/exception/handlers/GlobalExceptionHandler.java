@@ -1,6 +1,7 @@
 package org.ikrotsyuk.bsuir.firstservice.exception.handlers;
 
 import org.ikrotsyuk.bsuir.firstservice.controller.ArticleController;
+import org.ikrotsyuk.bsuir.firstservice.controller.ReactionController;
 import org.ikrotsyuk.bsuir.firstservice.controller.WriterController;
 import org.ikrotsyuk.bsuir.firstservice.exception.exceptions.ArticleWithSameTitleFoundException;
 import org.ikrotsyuk.bsuir.firstservice.exception.exceptions.NoArticleWithReactionArticleIdFound;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice(assignableTypes = {ArticleController.class, WriterController.class})
+@ControllerAdvice(assignableTypes = {ArticleController.class, WriterController.class, ReactionController.class})
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {

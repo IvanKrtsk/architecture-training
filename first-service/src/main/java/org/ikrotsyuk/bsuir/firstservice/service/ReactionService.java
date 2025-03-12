@@ -47,8 +47,7 @@ public class ReactionService {
     }
 
     public ReactionResponseDTO addReaction(ReactionRequestDTO reactionRequestDTO){
-        Optional<ArticleEntity> optionalArticleEntity = articleRepository.findById(reactionRequestDTO.getArticleId());
-        if(optionalArticleEntity.isPresent()) {
+        if(articleRepository.existsById(reactionRequestDTO.getArticleId())) {
             ReactionEntity reactionEntity = reactionMapper.toEntity(reactionRequestDTO);
             return reactionMapper.toDTO(reactionRepository.save(reactionEntity));
         } else

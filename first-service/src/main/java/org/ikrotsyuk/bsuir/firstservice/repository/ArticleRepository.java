@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
     Optional<ArticleEntity> findByTitle(String title);
+
+    boolean existsById(Long id);
 }

@@ -52,8 +52,7 @@ public class ArticleService {
     public ArticleResponseDTO addArticle(ArticleRequestDTO articleRequestDTO){
         Optional<ArticleEntity> optionalArticleEntity = articleRepository.findByTitle(articleRequestDTO.getTitle());
         if(optionalArticleEntity.isEmpty()) {
-            Optional<WriterEntity> optionalWriterEntity = writerRepository.findById(articleRequestDTO.getWriterId());
-            if(optionalWriterEntity.isPresent()) {
+            if(writerRepository.existsById(articleRequestDTO.getWriterId())) {
                 ArticleEntity articleEntity = articleMapper.toEntity(articleRequestDTO);
                 LocalDateTime localDateTime = LocalDateTime.now();
                 articleEntity.setCreatedAt(localDateTime);

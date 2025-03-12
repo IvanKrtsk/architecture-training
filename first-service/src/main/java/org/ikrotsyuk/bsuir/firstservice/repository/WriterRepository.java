@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface WriterRepository extends JpaRepository<WriterEntity, Long> {
     Optional<WriterEntity> findByLogin(String login);
+
+    boolean existsById(Long id);
 }
